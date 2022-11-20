@@ -100,27 +100,43 @@ let dataGlasses = [
 const domId = (id) => document.getElementById(id);
 
 const renderGlass = () => {
-  const content = dataGlasses.reduce((total, element, idx) => {
+  const imgGlass = dataGlasses.reduce((total, element) => {
     total += `
         <div class="vglasses__items col-4">
-          <img src="${dataGlasses[idx].src}" onclick="changeGlass()">
+          <img id="${element.id}" src="${element.src}" onclick="changeGlass(event)">
         </div>
     `;
     return total;
   }, "");
-  domId("vglassesList").innerHTML = content;
+  domId("vglassesList").innerHTML = imgGlass;
 };
 
-const changeGlass = () => {
-  const content = dataGlasses.reduce((total, element, idx) => {
-    total += `
-        <div>
-          <img src="${dataGlasses[idx].virtualImg}">
-        </div>
-    `;
+const changeGlass = (e) => {
+  let imgId = e.target.id;
+  const virtualGlass = dataGlasses.reduce((total, element) => {
+    if (imgId === element.id) {
+      total += `
+          <img src="${element.virtualImg}">
+      `;
+    }
     return total;
   }, "");
-  domId("avatar").innerHTML = content;
+  domId("avatar").innerHTML = virtualGlass;
+
+  const info = dataGlasses.reduce((total, element) => {
+    if (imgId === element.id) {
+      total += `
+          <p><span>Brand:</span> ${element.brand}</p>
+          <p><span>Name:</span> ${element.name}</p>
+          <p><span>Color:</span> ${element.color}</p>
+          <p><span>Price:</span> ${element.price}</p>
+          <p><span>Description:</span> ${element.description}</p>
+      `;
+    }
+    return total;
+  }, "");
+  domId("glassesInfo").innerHTML = info;
+  domId("glassesInfo").style.display = "block";
 };
 
 window.onload = () => {
